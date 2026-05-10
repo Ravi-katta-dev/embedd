@@ -72,6 +72,7 @@ const ModuleDetail = () => {
               {module.topics.map((topic, index) => (
                 <div 
                   key={topic.id}
+                  onClick={() => navigate(`/module/${moduleId}/topic/${topic.id}`)}
                   className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-200 transition-all group cursor-pointer"
                 >
                   <div className="flex items-center gap-4">
