@@ -1,24 +1,23 @@
 "use client";
 
 import React from 'react';
-import DashboardSidebar from '@/components/Sidebar';
-import ModuleCard from '@/components/ModuleCard';
-import { curriculum } from '@/data/curriculum';
-import { MadeWithDyad } from "@/components/made-with-dyad";
+import Sidebar from '../components/Sidebar';
+import ModuleCard from '../components/ModuleCard';
+import { curriculum } from '../data/curriculum';
+import { MadeWithDyad } from "../components/made-with-dyad";
 import { 
   Search, 
   Bell, 
-  User, 
   TrendingUp, 
   BookOpen, 
   Award 
 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Input } from '../components/ui/input';
 
 const Index = () => {
   return (
     <div className="flex min-h-screen bg-slate-50">
-      <DashboardSidebar />
+      <Sidebar />
       
       <main className="flex-1 p-8 overflow-y-auto">
         {/* Header */}

@@ -7,8 +7,6 @@ import {
   Trophy, 
   Settings, 
   Cpu, 
-  Code2, 
-  Terminal,
   ChevronRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -20,7 +18,7 @@ const menuItems = [
   { icon: Settings, label: 'Settings', active: false },
 ];
 
-const DashboardSidebar = () => {
+const Sidebar = () => {
   return (
     <div className="w-64 bg-slate-900 text-white h-screen flex flex-col border-r border-slate-800">
       <div className="p-6 flex items-center gap-3">
@@ -63,4 +61,4 @@ const DashboardSidebar = () => {
   );
 };
 
-export default DashboardSidebar;
+export default Sidebar;
