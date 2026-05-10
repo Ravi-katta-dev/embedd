@@ -29,6 +29,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 const Sidebar = () => {
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const isModuleActive = (moduleId: string) =>
     location.pathname.startsWith(`/module/${moduleId}`);
 
@@ -121,7 +122,7 @@ const Sidebar = () => {
   return (
     <>
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-slate-900 text-white border-b border-slate-800 z-40 px-4 flex items-center justify-between">
-        <Sheet>
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="text-white hover:bg-slate-800 hover:text-white">
               <Menu size={22} />
@@ -129,7 +130,7 @@ const Sidebar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[88%] max-w-sm bg-slate-900 text-white border-slate-800 p-0 overflow-y-auto">
-            <SidebarContent />
+            <SidebarContent onNavigate={() => setMobileOpen(false)} />
           </SheetContent>
         </Sheet>
         <p className="font-semibold">Embedded Systems</p>

@@ -70,7 +70,7 @@ const TopicView = () => {
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       
-      <main className="flex-1 flex flex-col min-h-screen lg:h-screen overflow-hidden pt-16 lg:pt-0">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden pt-16 lg:pt-0">
         <header className="min-h-16 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-2 lg:py-0 bg-white shrink-0 gap-3 sm:gap-4">
           <div className="flex items-center gap-3 sm:gap-4 min-w-0">
             <button 
