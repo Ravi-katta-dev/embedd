@@ -3,30 +3,32 @@ import { Button } from '@/components/ui/button';
 
 type Tab = 'explanation' | 'code' | 'diagram';
 
-const ContentTabs = ({ activeTab: Tab, onTabChange: (tab: Tab) => void }) => {
+interface ContentTabsProps {
+  activeTab: Tab;
+  onTabChange: (tab: Tab) => void;
+}
+
+const ContentTabs: React.FC<ContentTabsProps> = ({ activeTab, onTabChange }) => {
   return (
-    <div className="flex items-center mb-4">
-      <Button 
+    <div className="flex items-center gap-2 mb-6">
+      <Button
         onClick={() => onTabChange('explanation')}
-        className={`bg-blue-600 hover:bg-blue-700 rounded-md px-4 py-2 text-white ${
-          activeTab === 'explanation' ? 'bg-blue-700' : ''
-        }`}
+        variant={activeTab === 'explanation' ? 'default' : 'outline'}
+        className="rounded-xl px-4 py-2"
       >
         Explanation
       </Button>
-      <Button 
+      <Button
         onClick={() => onTabChange('code')}
-        className={`bg-green-600 hover:bg-green-700 rounded-md px-4 py-2 text-white ${
-          activeTab === 'code' ? 'bg-green-700' : ''
-        }`}
+        variant={activeTab === 'code' ? 'default' : 'outline'}
+        className="rounded-xl px-4 py-2"
       >
         Code
       </Button>
-      <Button 
+      <Button
         onClick={() => onTabChange('diagram')}
-        className={`bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-2 text-white ${
-          activeTab === 'diagram' ? 'bg-purple-700' : ''
-        }`}
+        variant={activeTab === 'diagram' ? 'default' : 'outline'}
+        className="rounded-xl px-4 py-2"
       >
         Diagram
       </Button>
