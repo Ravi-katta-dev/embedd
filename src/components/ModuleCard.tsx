@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -11,7 +12,8 @@ import {
   Clock, 
   HardDrive,
   CheckCircle2,
-  Circle
+  Circle,
+  ArrowRight
 } from 'lucide-react';
 import { Module } from '@/data/curriculum';
 import { cn } from '@/lib/utils';
@@ -30,12 +32,16 @@ interface ModuleCardProps {
 }
 
 const ModuleCard = ({ module }: ModuleCardProps) => {
+  const navigate = useNavigate();
   const Icon = iconMap[module.icon] || Code2;
   const completedCount = module.topics.filter(t => t.completed).length;
   const progress = (completedCount / module.topics.length) * 100;
 
   return (
-    <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all duration-300 hover:shadow-xl group">
+    <Card 
+      onClick={() => navigate(`/module/${module.id}`)}
+      className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all duration-300 hover:shadow-xl group cursor-pointer"
+    >
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start mb-2">
           <div className={cn(
@@ -64,26 +70,30 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
             <span>{completedCount}/{module.topics.length}</span>
           </div>
           <div className="space-y-2">
-            {module.topics.map((topic) => (
+            {module.topics.slice(0, 3).map((topic) => (
               <div key={topic.id} className="flex items-center gap-2 text-sm text-slate-600">
                 {topic.completed ? (
                   <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
                 ) : (
                   <Circle size={16} className="text-slate-300 shrink-0" />
                 )}
-                <span className={cn(topic.completed && "text-slate-400 line-through")}>
+                <span className={cn("truncate", topic.completed && "text-slate-400 line-through")}>
                   {topic.title}
                 </span>
               </div>
             ))}
+            {module.topics.length > 3 && (
+              <p className="text-xs text-slate-400 pl-6">+{module.topics.length - 3} more topics</p>
+            )}
           </div>
-          <div className="pt-4">
-            <div className="w-full bg-slate-100 rounded-full h-2">
+          <div className="pt-4 flex items-center gap-4">
+            <div className="flex-1 bg-slate-100 rounded-full h-2">
               <div 
                 className="bg-blue-600 h-2 rounded-full transition-all duration-500" 
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
+            <ArrowRight size={18} className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
           </div>
         </div>
       </CardContent>
