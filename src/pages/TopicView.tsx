@@ -5,13 +5,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { curriculum } from '../data/curriculum';
 import CodeSnippet from '../components/CodeSnippet';
+import Quiz from '../components/Quiz';
 import { 
   ArrowLeft, 
   ChevronLeft, 
   ChevronRight, 
   CheckCircle,
-  BookOpen,
-  MessageSquare
+  MessageSquare,
+  HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { showSuccess } from '@/utils/toast';
@@ -19,6 +20,7 @@ import { showSuccess } from '@/utils/toast';
 const TopicView = () => {
   const { moduleId, topicId } = useParams();
   const navigate = useNavigate();
+  const [showQuiz, setShowQuiz] = React.useState(false);
   
   const module = curriculum.find(m => m.id === moduleId);
   const topicIndex = module?.topics.findIndex(t => t.id === topicId) ?? -1;
@@ -38,12 +40,37 @@ const TopicView = () => {
     }
   };
 
+  // Mock quiz questions for demonstration
+  const quizQuestions = [
+    {
+      id: 1,
+      text: "What does the 'volatile' keyword tell the compiler?",
+      options: [
+        "The variable should be stored in flash memory",
+        "The variable's value can change unexpectedly outside the program's control",
+        "The variable is only accessible within the current file",
+        "The variable should be optimized for speed"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 2,
+      text: "Which memory address is typically used for memory-mapped I/O?",
+      options: [
+        "Stack memory addresses",
+        "Heap memory addresses",
+        "Specific hardware register addresses defined by the MCU",
+        "Virtual memory addresses managed by the OS"
+      ],
+      correctAnswer: 2
+    }
+  ];
+
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Top Navigation Bar */}
         <header className="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white shrink-0">
           <div className="flex items-center gap-4">
             <button 
@@ -60,9 +87,14 @@ const TopicView = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" className="rounded-xl gap-2">
-              <MessageSquare size={16} />
-              <span>Discuss</span>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="rounded-xl gap-2"
+              onClick={() => setShowQuiz(!showQuiz)}
+            >
+              <HelpCircle size={16} />
+              <span>{showQuiz ? "Back to Lesson" : "Take Quiz"}</span>
             </Button>
             <Button 
               onClick={handleComplete}
@@ -74,29 +106,34 @@ const TopicView = () => {
           </div>
         </header>
 
-        {/* Content Area */}
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto py-12 px-8">
-            <article className="prose prose-slate max-w-none">
-              <h1 className="text-4xl font-extrabold text-slate-900 mb-8">{topic.title}</h1>
-              
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mb-8">
-                <p className="text-blue-800 font-medium m-0">
-                  In this lesson, we'll explore the fundamental concepts of {topic.title.toLowerCase()} and how they apply to embedded systems development.
-                </p>
+            {showQuiz ? (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <h2 className="text-3xl font-bold text-slate-900 mb-8">Knowledge Check</h2>
+                <Quiz questions={quizQuestions} onComplete={handleComplete} />
               </div>
-
-              <p className="text-lg text-slate-600 leading-relaxed mb-6">
-                {topic.content || "Content for this topic is currently being prepared. Please check back soon for detailed explanations, diagrams, and code examples."}
-              </p>
-
-              {topic.id === 'c1' && (
-                <>
-                  <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-4">The Volatile Keyword</h3>
-                  <p className="text-slate-600 mb-6">
-                    The <code className="bg-slate-100 px-1.5 py-0.5 rounded text-blue-600">volatile</code> keyword is essential when dealing with memory-mapped I/O or variables modified by interrupts. It tells the compiler not to optimize accesses to that variable.
+            ) : (
+              <article className="prose prose-slate max-w-none animate-in fade-in duration-500">
+                <h1 className="text-4xl font-extrabold text-slate-900 mb-8">{topic.title}</h1>
+                
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mb-8">
+                  <p className="text-blue-800 font-medium m-0">
+                    In this lesson, we'll explore the fundamental concepts of {topic.title.toLowerCase()} and how they apply to embedded systems development.
                   </p>
-                  <CodeSnippet code={`// Example: Reading a hardware status register
+                </div>
+
+                <p className="text-lg text-slate-600 leading-relaxed mb-6">
+                  {topic.content || "Content for this topic is currently being prepared. Please check back soon for detailed explanations, diagrams, and code examples."}
+                </p>
+
+                {topic.id === 'c1' && (
+                  <>
+                    <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-4">The Volatile Keyword</h3>
+                    <p className="text-slate-600 mb-6">
+                      The <code className="bg-slate-100 px-1.5 py-0.5 rounded text-blue-600">volatile</code> keyword is essential when dealing with memory-mapped I/O or variables modified by interrupts. It tells the compiler not to optimize accesses to that variable.
+                    </p>
+                    <CodeSnippet code={`// Example: Reading a hardware status register
 volatile uint32_t *status_reg = (uint32_t *)0x40001000;
 
 while ((*status_reg & 0x01) == 0) {
@@ -104,62 +141,64 @@ while ((*status_reg & 0x01) == 0) {
     // Without 'volatile', the compiler might optimize this 
     // into an infinite loop if it thinks the value never changes.
 }`} />
-                </>
-              )}
+                  </>
+                )}
 
-              {topic.id === 'c2' && (
-                <>
-                  <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-4">Memory Mapping in C</h3>
-                  <p className="text-slate-600 mb-6">
-                    Directly accessing hardware registers requires casting integer addresses to pointers. This is a common pattern in low-level driver development.
-                  </p>
-                  <CodeSnippet code={`#define GPIO_BASE 0x40020000
+                {topic.id === 'c2' && (
+                  <>
+                    <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-4">Memory Mapping in C</h3>
+                    <p className="text-slate-600 mb-6">
+                      Directly accessing hardware registers requires casting integer addresses to pointers. This is a common pattern in low-level driver development.
+                    </p>
+                    <CodeSnippet code={`#define GPIO_BASE 0x40020000
 #define GPIO_MODER (*(volatile uint32_t *)(GPIO_BASE + 0x00))
 
 void init_gpio() {
     // Set pin 5 as output
     GPIO_MODER |= (1 << 10);
 }`} />
-                </>
-              )}
-            </article>
+                  </>
+                )}
+              </article>
+            )}
 
-            {/* Bottom Navigation */}
-            <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
-              {prevTopic ? (
-                <button 
-                  onClick={() => navigate(`/module/${moduleId}/topic/${prevTopic.id}`)}
-                  className="flex flex-col items-start group"
-                >
-                  <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
-                    <ChevronLeft size={14} /> Previous
-                  </span>
-                  <span className="text-slate-900 font-bold group-hover:text-blue-600 transition-colors">{prevTopic.title}</span>
-                </button>
-              ) : <div />}
+            {!showQuiz && (
+              <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
+                {prevTopic ? (
+                  <button 
+                    onClick={() => navigate(`/module/${moduleId}/topic/${prevTopic.id}`)}
+                    className="flex flex-col items-start group"
+                  >
+                    <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
+                      <ChevronLeft size={14} /> Previous
+                    </span>
+                    <span className="text-slate-900 font-bold group-hover:text-blue-600 transition-colors">{prevTopic.title}</span>
+                  </button>
+                ) : <div />}
 
-              {nextTopic ? (
-                <button 
-                  onClick={() => navigate(`/module/${moduleId}/topic/${nextTopic.id}`)}
-                  className="flex flex-col items-end group text-right"
-                >
-                  <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
-                    Next <ChevronRight size={14} />
-                  </span>
-                  <span className="text-slate-900 font-bold group-hover:text-blue-600 transition-colors">{nextTopic.title}</span>
-                </button>
-              ) : (
-                <button 
-                  onClick={() => navigate(`/module/${moduleId}`)}
-                  className="flex flex-col items-end group text-right"
-                >
-                  <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
-                    Finish <ChevronRight size={14} />
-                  </span>
-                  <span className="text-slate-900 font-bold group-hover:text-blue-600 transition-colors">Back to Module</span>
-                </button>
-              )}
-            </div>
+                {nextTopic ? (
+                  <button 
+                    onClick={() => navigate(`/module/${moduleId}/topic/${nextTopic.id}`)}
+                    className="flex flex-col items-end group text-right"
+                  >
+                    <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
+                      Next <ChevronRight size={14} />
+                    </span>
+                    <span className="text-slate-900 font-bold group-hover:text-blue-600 transition-colors">{nextTopic.title}</span>
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => navigate(`/module/${moduleId}`)}
+                    className="flex flex-col items-end group text-right"
+                  >
+                    <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
+                      Finish <ChevronRight size={14} />
+                    </span>
+                    <span className="text-slate-900 font-bold group-hover:text-blue-600 transition-colors">Back to Module</span>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </main>
