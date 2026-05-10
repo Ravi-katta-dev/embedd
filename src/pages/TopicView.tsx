@@ -4,14 +4,12 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { curriculum } from '../data/curriculum';
-import CodeSnippet from '../components/CodeSnippet';
 import Quiz from '../components/Quiz';
 import { 
   ArrowLeft, 
   ChevronLeft, 
   ChevronRight, 
   CheckCircle,
-  MessageSquare,
   HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -124,40 +122,43 @@ const TopicView = () => {
                 </div>
 
                 <p className="text-lg text-slate-600 leading-relaxed mb-6">
-                  {topic.content || "Content for this topic is currently being prepared. Please check back soon for detailed explanations, diagrams, and code examples."}
+                  {topic.content || 'Content for this topic is currently being prepared. Please check back soon for detailed explanations and guided learning sections.'}
                 </p>
 
-                {topic.id === 'c1' && (
-                  <>
-                    <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-4">The Volatile Keyword</h3>
-                    <p className="text-slate-600 mb-6">
-                      The <code className="bg-slate-100 px-1.5 py-0.5 rounded text-blue-600">volatile</code> keyword is essential when dealing with memory-mapped I/O or variables modified by interrupts. It tells the compiler not to optimize accesses to that variable.
-                    </p>
-                    <CodeSnippet code={`// Example: Reading a hardware status register
-volatile uint32_t *status_reg = (uint32_t *)0x40001000;
-
-while ((*status_reg & 0x01) == 0) {
-    // Wait for bit 0 to be set by hardware
-    // Without 'volatile', the compiler might optimize this 
-    // into an infinite loop if it thinks the value never changes.
-}`} />
-                  </>
+                {topic.learningGoals && topic.learningGoals.length > 0 && (
+                  <section className="mt-10 mb-8">
+                    <h3 className="text-2xl font-bold text-slate-800 mb-4">Learning Goals</h3>
+                    <ul className="space-y-2">
+                      {topic.learningGoals.map((goal, index) => (
+                        <li key={`${topic.id}-goal-${index}`} className="text-slate-600 flex items-start gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" />
+                          <span>{goal}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
                 )}
 
-                {topic.id === 'c2' && (
-                  <>
-                    <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-4">Memory Mapping in C</h3>
-                    <p className="text-slate-600 mb-6">
-                      Directly accessing hardware registers requires casting integer addresses to pointers. This is a common pattern in low-level driver development.
-                    </p>
-                    <CodeSnippet code={`#define GPIO_BASE 0x40020000
-#define GPIO_MODER (*(volatile uint32_t *)(GPIO_BASE + 0x00))
-
-void init_gpio() {
-    // Set pin 5 as output
-    GPIO_MODER |= (1 << 10);
-}`} />
-                  </>
+                {topic.subtopics && topic.subtopics.length > 0 && (
+                  <section className="mt-10">
+                    <h3 className="text-2xl font-bold text-slate-800 mb-5">Subtopics</h3>
+                    <div className="space-y-4">
+                      {topic.subtopics.map((subtopic, index) => (
+                        <div key={`${topic.id}-subtopic-${index}`} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                          <h4 className="text-lg font-bold text-slate-900 mb-2">{subtopic.title}</h4>
+                          <p className="text-slate-600 mb-3">{subtopic.description}</p>
+                          <ul className="space-y-1.5">
+                            {subtopic.keyPoints.map((point, pointIndex) => (
+                              <li key={`${topic.id}-subtopic-${index}-point-${pointIndex}`} className="text-sm text-slate-600 flex items-start gap-2">
+                                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                                <span>{point}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
                 )}
               </article>
             )}
