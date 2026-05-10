@@ -1,10 +1,16 @@
-import React from 'react';
+export interface Subtopic {
+  title: string;
+  description: string;
+  keyPoints: string[];
+}
 
 export interface Topic {
   id: string;
   title: string;
   completed: boolean;
   content?: string;
+  learningGoals?: string[];
+  subtopics?: Subtopic[];
   codeExamples?: string[];
   diagram?: string;
   duration?: string;
@@ -33,42 +39,125 @@ export const curriculum: Module[] = [
         id: 'c1',
         title: 'Data Types & Storage Classes',
         completed: true,
-        content: 'In embedded C, understanding storage classes (static, extern, volatile) is crucial for memory mapping and hardware interaction. The volatile keyword prevents compiler optimizations on variables that may change unexpectedly.',
-        codeExamples: [
-          '// Example: Volatile variable usage\\nvolatile uint32_t *status_reg = (uint32_t *)0x40001000;',
-          '// Example: Static vs Extern\\nstatic int counter = 0;\\nextern int global_counter;'
+        content: 'This lesson explains how C data representation and storage classes influence memory layout, scope, and reliability in firmware.',
+        learningGoals: [
+          'Differentiate automatic, static, and external storage duration.',
+          'Choose the right type width for hardware and protocol data.',
+          'Avoid undefined behavior from implicit promotions and overflow.'
         ],
-        diagram: 'graph TD\\nA[Memory Address] --> B[volatile Variable]\\nC[Compiler Optimization] --> D[volatile Keyword]'
+        subtopics: [
+          {
+            title: 'Integer and floating-point representation',
+            description: 'Understand bit width, signedness, and precision trade-offs for embedded targets.',
+            keyPoints: [
+              'Use fixed-width integer types for portability.',
+              'Account for conversion and promotion rules in expressions.',
+              'Limit floating point usage in time-critical paths.'
+            ]
+          },
+          {
+            title: 'Storage classes and lifetime',
+            description: 'Map variable lifetime and visibility to practical firmware design.',
+            keyPoints: [
+              'Static objects persist across function calls.',
+              'Extern symbols define module-level interfaces.',
+              'Auto variables are stack-resident and temporary.'
+            ]
+          }
+        ]
       },
       {
         id: 'c2',
         title: 'Memory Mapping in C',
         completed: false,
-        content: 'Directly accessing hardware registers requires casting integer addresses to pointers. This is a common pattern in low-level driver development.',
-        codeExamples: [
-          '#define GPIO_BASE 0x40020000\\n#define GPIO_MODER (*(volatile uint32_t *)(GPIO_BASE + 0x00))\\n\\nvoid init_gpio() {\\n    GPIO_MODER |= (1 << 10);\\n}'
+        content: 'Learn how firmware views peripherals and memory regions through addresses, sections, and linker-managed placement.',
+        learningGoals: [
+          'Relate linker sections to startup and runtime behavior.',
+          'Interpret memory maps to estimate usage and free space.',
+          'Design safer access patterns for memory-mapped peripherals.'
         ],
-        diagram: 'graph TD\\nA[GPIO_BASE] --> B[GPIO_MODER]\\nC[Bit 10] --> D[Pin 5 Output]'
+        subtopics: [
+          {
+            title: 'Memory regions and linker sections',
+            description: 'Discover how code and data are placed in flash, SRAM, and special regions.',
+            keyPoints: [
+              'Text and rodata usually reside in flash.',
+              'Data and bss are initialized during startup.',
+              'Section planning helps prevent runtime memory overlap.'
+            ]
+          },
+          {
+            title: 'Peripheral address spaces',
+            description: 'Understand why specific address ranges map to hardware registers.',
+            keyPoints: [
+              'Register access follows device reference manuals.',
+              'Read-modify-write sequences need atomicity awareness.',
+              'Alignment and access width matter for correctness.'
+            ]
+          }
+        ]
       },
       {
         id: 'c3',
         title: 'Pointers & Arrays',
         completed: false,
-        content: 'Pointers are fundamental to embedded systems. They provide direct memory access, which is essential for hardware register manipulation and efficient data structures.',
-        codeExamples: [
-          '// Pointer arithmetic for buffer processing\\nuint8_t *buffer = (uint8_t *)0x20001000;\\nfor(int i = 0; i < 10; i++) {\\n    buffer[i] = i * 2;\\n}'
+        content: 'Build confidence with pointers and arrays for buffers, tables, and memory-efficient data flow.',
+        learningGoals: [
+          'Apply pointer arithmetic safely with clear bounds.',
+          'Use const qualifiers to protect immutable data.',
+          'Recognize common pointer aliasing risks in embedded code.'
         ],
-        diagram: 'graph TD\\nA[Pointer] --> B[Memory Address]\\nC[Array Index] --> D[Offset Calculation]'
+        subtopics: [
+          {
+            title: 'Pointer basics and indirection',
+            description: 'Use pointers to access and manipulate memory intentionally.',
+            keyPoints: [
+              'Separate pointer ownership from raw access.',
+              'Validate addresses before dereferencing.',
+              'Use clear naming for pointer intent.'
+            ]
+          },
+          {
+            title: 'Arrays, buffers, and traversal',
+            description: 'Treat arrays as contiguous memory with explicit size handling.',
+            keyPoints: [
+              'Always carry buffer length with buffer pointer.',
+              'Avoid off-by-one indexing errors.',
+              'Prefer defensive checks in packet parsing.'
+            ]
+          }
+        ]
       },
       {
         id: 'c4',
         title: 'Structs & Bitfields',
         completed: false,
-        content: 'Structs and bitfields allow you to organize hardware register layouts and memory-mapped device configurations in a clean, readable way.',
-        codeExamples: [
-          'typedef struct {\\n    uint32_t MODER: 10;\\n    uint32_t OSPEEDR: 10;\\n    uint32_t AFR: 12;\\n} GPIO_TypeDef;'
+        content: 'Organize related state with structures and reason carefully about bit-level fields for compact representations.',
+        learningGoals: [
+          'Model hardware-like layouts with understandable abstractions.',
+          'Understand struct padding and alignment implications.',
+          'Use bitfields judiciously where portability is acceptable.'
         ],
-        diagram: 'graph TD\\nA[Struct] --> B[Bitfield MODER]\\nA --> C[Bitfield OSPEEDR]\\nA --> D[Bitfield AFR]'
+        subtopics: [
+          {
+            title: 'Struct layout and padding',
+            description: 'Learn how compilers align structure members and why it matters.',
+            keyPoints: [
+              'Member order can affect memory footprint.',
+              'Padding can impact protocol serialization.',
+              'Explicit packing may trade speed for size.'
+            ]
+          },
+          {
+            title: 'Bitfield design considerations',
+            description: 'Represent packed flags and small ranges with caution.',
+            keyPoints: [
+              'Bitfield ordering is compiler dependent.',
+              'Prefer masks for highly portable register logic.',
+              'Document semantics for each packed field.'
+            ]
+          }
+        ]
       }
     ]
   },
@@ -84,31 +173,94 @@ export const curriculum: Module[] = [
         id: 'm1',
         title: 'ARM Cortex-M Overview',
         completed: false,
-        content: 'The ARM Cortex-M series is designed for microcontroller applications. It features a Harvard architecture with separate instruction and data buses.',
-        codeExamples: [
-          '// Exception handling setup\\n__asm__ volatile (\"cpsie i\"); // Enable interrupts'
+        content: 'Explore core architecture concepts that shape interrupt handling, memory access, and deterministic execution.',
+        learningGoals: [
+          'Identify key Cortex-M blocks and responsibilities.',
+          'Understand privilege levels and exception model basics.',
+          'Connect architecture features to firmware performance.'
         ],
-        diagram: 'graph TD\\nA[Cortex-M Core] --> B[ NVIC]\\nA --> C[SysTick]\\nA --> D[Debug ITM]'
+        subtopics: [
+          {
+            title: 'Core pipeline and execution model',
+            description: 'Understand instruction flow and how branch behavior affects timing.',
+            keyPoints: [
+              'Pipeline depth impacts latency and throughput.',
+              'Thumb instruction set drives code density.',
+              'Exception entry and exit influence real-time response.'
+            ]
+          },
+          {
+            title: 'NVIC and interrupt priorities',
+            description: 'Use nested interrupts effectively without starving critical work.',
+            keyPoints: [
+              'Priority grouping controls preemption behavior.',
+              'Keep interrupt handlers short and predictable.',
+              'Defer noncritical work to background tasks.'
+            ]
+          }
+        ]
       },
       {
         id: 'm2',
         title: 'Clock Configuration',
         completed: false,
-        content: 'The clock system is the heart of any MCU. Understanding HSI, HSE, PLL, and clock trees is essential for proper peripheral timing.',
-        codeExamples: [
-          'RCC->CR |= RCC_CR_HSEON; // Enable HSE\\nwhile(!(RCC->CR & RCC_CR_HSERDY)); // Wait'
+        content: 'Understand clock sources and distribution so every subsystem runs at the intended frequency and power budget.',
+        learningGoals: [
+          'Select suitable clock sources for startup and runtime.',
+          'Trace clock tree routing to core and peripherals.',
+          'Balance performance, stability, and power consumption.'
         ],
-        diagram: 'graph LR\\nHSE --> PLL --> SYSCLK --> AHB --> APB1\\nHSE --> SYSCLK --> AHB --> APB2'
+        subtopics: [
+          {
+            title: 'Clock sources and PLL usage',
+            description: 'Compare internal and external oscillators with multiplication stages.',
+            keyPoints: [
+              'Internal oscillators simplify design but vary in accuracy.',
+              'External crystals improve timing-sensitive applications.',
+              'PLL settings must respect vendor limits.'
+            ]
+          },
+          {
+            title: 'Bus clocks and prescalers',
+            description: 'Distribute frequencies safely to buses and peripherals.',
+            keyPoints: [
+              'Different buses can run at different rates.',
+              'Prescaler choices affect peripheral timing formulas.',
+              'Incorrect setup can break communication peripherals.'
+            ]
+          }
+        ]
       },
       {
         id: 'm3',
         title: 'GPIO Programming',
         completed: false,
-        content: 'GPIO (General Purpose Input/Output) is the most fundamental peripheral. Configuring pins as inputs, outputs, or alternate functions is a core skill.',
-        codeExamples: [
-          'GPIOA->MODER |= (1 << 5); // Set PA5 as output\\nGPIOA->ODR |= (1 << 5); // Set pin high'
+        content: 'Develop practical control over digital I/O pins for sensing, actuation, and interface multiplexing.',
+        learningGoals: [
+          'Configure input, output, and alternate-function modes.',
+          'Set pull, speed, and drive options appropriately.',
+          'Avoid common pin-state and contention mistakes.'
         ],
-        diagram: 'graph TD\\nA[GPIO Port] --> B[MODER]\\nA --> C[OSPEEDR]\\nA --> D[ODR]\\nA --> E[AFR]'
+        subtopics: [
+          {
+            title: 'Pin modes and electrical behavior',
+            description: 'Map logical pin modes to actual electrical outcomes.',
+            keyPoints: [
+              'Input mode reads external state.',
+              'Output mode drives high or low levels.',
+              'Alternate mode routes peripheral signals.'
+            ]
+          },
+          {
+            title: 'Safe GPIO design patterns',
+            description: 'Prevent accidental short conditions and unstable reads.',
+            keyPoints: [
+              'Use pull resistors for floating inputs.',
+              'Initialize outputs before enabling connected loads.',
+              'Debounce mechanical inputs in hardware or software.'
+            ]
+          }
+        ]
       }
     ]
   },
@@ -124,21 +276,63 @@ export const curriculum: Module[] = [
         id: 'l1',
         title: 'Linux Filesystem',
         completed: false,
-        content: 'Understanding the Linux directory structure, file permissions, and common commands is essential for embedded Linux development.',
-        codeExamples: [
-          '# List files with permissions\\nls -la /home/user\\n# Change directory\\ncd /etc'
+        content: 'Understand Linux directory conventions and file metadata to diagnose systems and manage embedded images confidently.',
+        learningGoals: [
+          'Navigate the filesystem hierarchy with purpose.',
+          'Interpret permissions and ownership quickly.',
+          'Identify where device nodes and runtime data live.'
         ],
-        diagram: 'graph TD\\n/ --> home\\n/ --> etc\\n/ --> dev\\n/ --> proc'
+        subtopics: [
+          {
+            title: 'Hierarchy and system directories',
+            description: 'Learn what belongs in root, configuration, temporary, and user spaces.',
+            keyPoints: [
+              '/etc stores system configuration files.',
+              '/dev exposes device files for hardware interfaces.',
+              '/proc and /sys provide kernel and runtime metadata.'
+            ]
+          },
+          {
+            title: 'Permissions and ownership model',
+            description: 'Control access through user, group, and mode semantics.',
+            keyPoints: [
+              'Read, write, and execute bits define access rights.',
+              'Ownership changes affect service behavior.',
+              'Least privilege reduces security exposure.'
+            ]
+          }
+        ]
       },
       {
         id: 'l2',
         title: 'Shell Scripting Basics',
         completed: false,
-        content: 'Shell scripts automate repetitive tasks in embedded development workflows such as building, flashing, and testing.',
-        codeExamples: [
-          '#!/bin/bash\\nfor file in *.c; do\\n    gcc -o ${file%.c} $file\\ndone'
+        content: 'Use shell scripts to automate repetitive workflows in build, deployment, logging, and diagnostics.',
+        learningGoals: [
+          'Write maintainable command-line automation.',
+          'Handle script inputs and error paths clearly.',
+          'Structure scripts for reuse in CI and local workflows.'
         ],
-        diagram: 'graph TD\\nA[Script] --> B[Loop]\\nB --> C[Compile]\\nB --> D[Link]'
+        subtopics: [
+          {
+            title: 'Script structure and execution flow',
+            description: 'Organize scripts with clear setup, action, and cleanup phases.',
+            keyPoints: [
+              'Use strict modes to catch errors early.',
+              'Quote variables to avoid expansion surprises.',
+              'Break complex logic into shell functions.'
+            ]
+          },
+          {
+            title: 'Automation patterns for embedded teams',
+            description: 'Apply scripting to compilation, flashing, and report generation.',
+            keyPoints: [
+              'Loop over target boards or artifacts safely.',
+              'Capture logs with timestamps for traceability.',
+              'Return meaningful exit codes for CI pipelines.'
+            ]
+          }
+        ]
       }
     ]
   },
@@ -154,31 +348,94 @@ export const curriculum: Module[] = [
         id: 'r1',
         title: 'RTOS Fundamentals',
         completed: false,
-        content: 'A Real-Time Operating System provides multitasking capabilities with deterministic timing. Tasks are the basic unit of execution.',
-        codeExamples: [
-          '// Creating a task in FreeRTOS\\nxTaskCreate(vTaskFunction, \"Task1\", 128, NULL, 1, NULL);'
+        content: 'Understand how an RTOS coordinates tasks with deterministic timing under constrained resources.',
+        learningGoals: [
+          'Differentiate tasks, threads, and scheduler roles.',
+          'Interpret ready, blocked, and running states.',
+          'Estimate context-switch overhead implications.'
         ],
-        diagram: 'graph TD\\nA[RTOS Kernel] --> B[Task 1]\\nA --> C[Task 2]\\nA --> D[Task 3]\\nA --> E[Scheduler]'
+        subtopics: [
+          {
+            title: 'Task model and lifecycle',
+            description: 'Track how tasks are created, scheduled, and terminated.',
+            keyPoints: [
+              'Task priorities influence CPU allocation.',
+              'Stack size must match worst-case usage.',
+              'Blocked tasks wait for events efficiently.'
+            ]
+          },
+          {
+            title: 'Determinism and timing behavior',
+            description: 'Build predictable systems by controlling latency sources.',
+            keyPoints: [
+              'Jitter affects control loops and sampling.',
+              'Periodic task design needs stable timing reference.',
+              'Runtime instrumentation reveals bottlenecks.'
+            ]
+          }
+        ]
       },
       {
         id: 'r2',
         title: 'Synchronization Primitives',
         completed: false,
-        content: 'Semaphores, mutexes, and queues are used to coordinate access to shared resources and communicate between tasks.',
-        codeExamples: [
-          '// Binary semaphore for resource access\\nxSemaphoreGive(binary_sem);\\nxSemaphoreTake(binary_sem, portMAX_DELAY);'
+        content: 'Coordinate shared resources and task communication with the right synchronization mechanism.',
+        learningGoals: [
+          'Choose between semaphores, mutexes, and queues.',
+          'Prevent deadlocks and priority inversion.',
+          'Model producer-consumer communication safely.'
         ],
-        diagram: 'graph TD\\nA[Task 1] --> B[Semaphore]\\nA --> C[Shared Resource]\\nD[Task 2] --> B'
+        subtopics: [
+          {
+            title: 'Mutual exclusion and shared state',
+            description: 'Protect critical sections without blocking the system unnecessarily.',
+            keyPoints: [
+              'Mutexes guard ownership of shared resources.',
+              'Hold locks for minimal duration.',
+              'Use timeout strategies to detect lock issues.'
+            ]
+          },
+          {
+            title: 'Inter-task communication',
+            description: 'Move data and events between tasks with predictable behavior.',
+            keyPoints: [
+              'Queues decouple producers and consumers.',
+              'Semaphores signal event availability.',
+              'Message design should include ownership rules.'
+            ]
+          }
+        ]
       },
       {
         id: 'r3',
         title: 'Interrupt Handling in RTOS',
         completed: false,
-        content: 'Interrupt Service Routines (ISRs) in RTOS environments must be short and defer work to tasks using queues or semaphores.',
-        codeExamples: [
-          '// ISR posting to queue\\nvoid EXTI_IRQHandler() {\\n    BaseType_t xHigherPriorityTaskWoken = pdFALSE;\\n    xQueueSendFromISR(xQueue, &data, &xHigherPriorityTaskWoken);\\n}'
+        content: 'Design ISR paths that are fast, safe, and cooperative with scheduler-driven processing.',
+        learningGoals: [
+          'Separate time-critical ISR work from deferred processing.',
+          'Use ISR-safe APIs and context switching correctly.',
+          'Measure and reduce interrupt latency consistently.'
         ],
-        diagram: 'graph TD\\nA[Interrupt] --> B[ISR]\\nB --> C[Queue]\\nC --> D[Task]'
+        subtopics: [
+          {
+            title: 'ISR design best practices',
+            description: 'Keep interrupt code short and deterministic.',
+            keyPoints: [
+              'Acknowledge interrupt sources promptly.',
+              'Avoid blocking operations in ISR context.',
+              'Minimize shared-state writes from interrupts.'
+            ]
+          },
+          {
+            title: 'Deferred execution strategies',
+            description: 'Hand off heavier work to tasks using queues or notifications.',
+            keyPoints: [
+              'Use wake-up mechanisms for high-priority handlers.',
+              'Batch low-priority events to reduce overhead.',
+              'Verify ISR to task handoff under peak load.'
+            ]
+          }
+        ]
       }
     ]
   },
@@ -194,21 +451,63 @@ export const curriculum: Module[] = [
         id: 'p1',
         title: 'UART Communication',
         completed: false,
-        content: 'UART (Universal Asynchronous Receiver/Transmitter) is one of the most common serial communication protocols in embedded systems.',
-        codeExamples: [
-          '// UART initialization\\nUSART2->BRR = 0x683; // 115200 baud\\nUSART2->CR1 |= USART_CR1_TE | USART_CR1_RE;'
+        content: 'Build reliable asynchronous serial links for logging, command interfaces, and device integration.',
+        learningGoals: [
+          'Configure framing and baud-rate assumptions correctly.',
+          'Identify and recover from communication errors.',
+          'Design robust text and binary UART protocols.'
         ],
-        diagram: 'graph TD\\nA[UART TX] --> B[Receiver]\\nC[UART RX] --> D[Transmitter]'
+        subtopics: [
+          {
+            title: 'Framing and baud-rate alignment',
+            description: 'Understand start bits, stop bits, parity, and timing tolerance.',
+            keyPoints: [
+              'Mismatched baud rates cause framing errors.',
+              'Parity helps detect single-bit corruption.',
+              'Stable clocks improve long-run reliability.'
+            ]
+          },
+          {
+            title: 'Practical UART integration',
+            description: 'Implement buffering and flow control for real systems.',
+            keyPoints: [
+              'Use ring buffers for bursty traffic.',
+              'Separate RX parsing from interrupt context.',
+              'Choose suitable timeout and retry policies.'
+            ]
+          }
+        ]
       },
       {
         id: 'p2',
         title: 'SPI Protocol',
         completed: false,
-        content: 'SPI (Serial Peripheral Interface) provides full-duplex communication with a master-slave architecture using MOSI, MISO, SCK, and SS lines.',
-        codeExamples: [
-          '// SPI transmission\\nSPI1->DR = data;\\nwhile(!(SPI1->SR & SPI_SR_TXE));'
+        content: 'Apply high-throughput synchronous communication between controllers and peripherals.',
+        learningGoals: [
+          'Select SPI mode and clock phase correctly.',
+          'Manage chip-select behavior for multiple devices.',
+          'Handle full-duplex transfers and transaction boundaries.'
         ],
-        diagram: 'graph TD\\nA[Master] --> B[MOSI]\\nA --> C[MISO]\\nA --> D[SCK]\\nA --> E[SS]'
+        subtopics: [
+          {
+            title: 'Signal roles and timing modes',
+            description: 'Map clock polarity and phase settings to slave expectations.',
+            keyPoints: [
+              'MOSI and MISO operate simultaneously.',
+              'Mode mismatch leads to shifted data.',
+              'Clock frequency must satisfy slave limits.'
+            ]
+          },
+          {
+            title: 'Transaction design',
+            description: 'Structure command and payload exchanges for clarity and reliability.',
+            keyPoints: [
+              'Assert and release chip select at correct boundaries.',
+              'Include status bytes where needed for validation.',
+              'Document endian assumptions for multibyte fields.'
+            ]
+          }
+        ]
       }
     ]
   },
@@ -224,21 +523,63 @@ export const curriculum: Module[] = [
         id: 'd1',
         title: 'HAL Architecture',
         completed: false,
-        content: 'The Hardware Abstraction Layer (HAL) provides a standardized interface to hardware peripherals, making code portable across different MCU families.',
-        codeExamples: [
-          '// HAL GPIO init\\nHAL_GPIO_Init(GPIOA, &gpio_InitStruct);\\nHAL_Delay(100);'
+        content: 'Design hardware abstraction boundaries that keep application logic portable and maintainable.',
+        learningGoals: [
+          'Separate application policy from hardware mechanism.',
+          'Define stable, testable HAL contracts.',
+          'Plan for platform variation without API breakage.'
         ],
-        diagram: 'graph TD\\nA[Application] --> B[HAL Layer]\\nB --> C[LL Driver]\\nC --> D[Hardware Register]'
+        subtopics: [
+          {
+            title: 'Layer boundaries and responsibilities',
+            description: 'Assign clear ownership to application, HAL, and low-level drivers.',
+            keyPoints: [
+              'HAL should expose intent-oriented operations.',
+              'Low-level layers manage register details.',
+              'Dependency direction should remain one-way.'
+            ]
+          },
+          {
+            title: 'Portability and testability',
+            description: 'Enable host-based validation and board-specific adaptation.',
+            keyPoints: [
+              'Use interfaces that support mock implementations.',
+              'Keep board configuration data explicit.',
+              'Track assumptions that differ by hardware family.'
+            ]
+          }
+        ]
       },
       {
         id: 'd2',
         title: 'Driver Development Patterns',
         completed: false,
-        content: 'Good driver design follows patterns like initialization, configuration, start/stop, and interrupt handling callbacks.',
-        codeExamples: [
-          '// Driver init pattern\\nint my_driver_init(void) {\\n    if (register_base == NULL) return -1;\\n    // Configure registers\\n    return 0;\\n}'
+        content: 'Build reusable drivers using lifecycle patterns, error strategies, and observability hooks.',
+        learningGoals: [
+          'Create consistent initialization and state transitions.',
+          'Surface meaningful errors and recovery paths.',
+          'Instrument drivers for diagnosis in field conditions.'
         ],
-        diagram: 'graph TD\\nA[Init] --> B[Configure]\\nB --> C[Start]\\nC --> D[Interrupt Handler]'
+        subtopics: [
+          {
+            title: 'Driver lifecycle and state machines',
+            description: 'Represent startup, active, error, and shutdown behavior explicitly.',
+            keyPoints: [
+              'State machines make edge cases visible.',
+              'Initialization should validate dependencies first.',
+              'Reset paths must restore known-safe states.'
+            ]
+          },
+          {
+            title: 'Error handling and diagnostics',
+            description: 'Capture enough context to debug intermittent hardware faults.',
+            keyPoints: [
+              'Classify transient versus permanent failures.',
+              'Expose counters for retries and dropped events.',
+              'Use concise logs that preserve timing clarity.'
+            ]
+          }
+        ]
       }
     ]
   }
