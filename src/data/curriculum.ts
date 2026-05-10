@@ -287,9 +287,9 @@ export const curriculum: Module[] = [
             title: 'Hierarchy and system directories',
             description: 'Learn what belongs in root, configuration, temporary, and user spaces.',
             keyPoints: [
-              'Etc stores system configuration files.',
-              'Dev exposes device files for hardware interfaces.',
-              'Proc and sys provide kernel and runtime metadata.'
+              '/etc stores system configuration files.',
+              '/dev exposes device files for hardware interfaces.',
+              '/proc and /sys provide kernel and runtime metadata.'
             ]
           },
           {
