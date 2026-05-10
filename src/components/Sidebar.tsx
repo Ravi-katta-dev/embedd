@@ -6,15 +6,14 @@ import { curriculum } from '../data/curriculum';
 import { 
   Code2, 
   Cpu, 
-  Terminal, 
-  Clock, 
-  Database, 
-  HardDrive,
+  Terminal,   Clock, 
+  Database,   HardDrive,
   BookOpen,
   Trophy,
   ChevronRight
 } from 'lucide-react';
 
+// Ensure proper icon mapping
 const iconMap: Record<string, any> = {
   Code2,
   Cpu,
@@ -57,8 +56,7 @@ const Sidebar = () => {
             to="/certifications" 
             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
               location.pathname === '/certifications' 
-                ? 'bg-blue-600 text-white' 
-                : 'text-slate-300 hover:bg-slate-800'
+                ? 'bg-blue-600 text-white'                 : 'text-slate-300 hover:bg-slate-800'
             }`}
           >
             <Trophy size={20} />
@@ -99,8 +97,7 @@ const Sidebar = () => {
                   <div className="ml-12 mt-2">
                     <div className="w-full bg-slate-800 rounded-full h-1.5">
                       <div 
-                        className="bg-blue-500 h-1.5 rounded-full transition-all duration-500" 
-                        style={{ width: `${progress}%` }}
+                        className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"                         style={{ width: `${progress}%` }}
                       ></div>
                     </div>
                   </div>
