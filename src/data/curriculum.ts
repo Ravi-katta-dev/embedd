@@ -276,11 +276,12 @@ export const curriculum: Module[] = [
         id: 'l1',
         title: 'Linux Filesystem',
         completed: false,
-        content: 'Understand Linux directory conventions and file metadata to diagnose systems and manage embedded images confidently.',
+        content: 'Understand Linux directory conventions, file metadata, links, and storage inspection workflows to diagnose systems and manage embedded images confidently.',
         learningGoals: [
           'Navigate the filesystem hierarchy with purpose.',
           'Interpret permissions and ownership quickly.',
-          'Identify where device nodes and runtime data live.'
+          'Identify where device nodes and runtime data live.',
+          'Use discovery commands to find configuration and log artifacts quickly.'
         ],
         subtopics: [
           {
@@ -300,6 +301,15 @@ export const curriculum: Module[] = [
               'Ownership changes affect service behavior.',
               'Least privilege reduces security exposure.'
             ]
+          },
+          {
+            title: 'Links, mounts, and disk usage',
+            description: 'Work with symbolic links, mounted filesystems, and storage analysis during field debugging.',
+            keyPoints: [
+              'Distinguish hard links from symbolic links.',
+              'Use mount information to understand removable and virtual filesystems.',
+              'Measure disk usage to prevent log or image growth issues.'
+            ]
           }
         ]
       },
@@ -307,11 +317,12 @@ export const curriculum: Module[] = [
         id: 'l2',
         title: 'Shell Scripting Basics',
         completed: false,
-        content: 'Use shell scripts to automate repetitive workflows in build, deployment, logging, and diagnostics.',
+        content: 'Use shell scripts to automate repetitive workflows in build, deployment, logging, diagnostics, and board bring-up validation.',
         learningGoals: [
           'Write maintainable command-line automation.',
           'Handle script inputs and error paths clearly.',
-          'Structure scripts for reuse in CI and local workflows.'
+          'Structure scripts for reuse in CI and local workflows.',
+          'Debug scripts quickly using tracing and safe logging patterns.'
         ],
         subtopics: [
           {
@@ -330,6 +341,77 @@ export const curriculum: Module[] = [
               'Loop over target boards or artifacts safely.',
               'Capture logs with timestamps for traceability.',
               'Return meaningful exit codes for CI pipelines.'
+            ]
+          },
+          {
+            title: 'Arguments, environment, and debugging',
+            description: 'Make scripts configurable, robust, and observable in development and production CI runs.',
+            keyPoints: [
+              'Parse positional arguments and optional flags consistently.',
+              'Validate required environment variables early.',
+              'Use trace modes and controlled debug output to isolate failures.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'l3',
+        title: 'Processes, Services, and Logs',
+        completed: false,
+        content: 'Operate Linux-based embedded targets by inspecting processes, managing services, and collecting actionable logs.',
+        learningGoals: [
+          'Inspect process state and resource consumption with confidence.',
+          'Control service lifecycle during startup and runtime debugging.',
+          'Read system and application logs to root-cause failures quickly.'
+        ],
+        subtopics: [
+          {
+            title: 'Process inspection and signals',
+            description: 'Track long-running applications and use signals safely to control process behavior.',
+            keyPoints: [
+              'Use ps and top output to identify CPU and memory pressure.',
+              'Understand common signals like TERM, INT, and KILL.',
+              'Avoid abrupt termination when graceful shutdown is possible.'
+            ]
+          },
+          {
+            title: 'Service and log workflows',
+            description: 'Manage startup services and investigate operational issues with centralized logs.',
+            keyPoints: [
+              'Start, stop, and verify service health with service managers.',
+              'Filter log streams by unit, severity, or time window.',
+              'Correlate boot-time and runtime events for faster triage.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'l4',
+        title: 'Command-Line Text Processing',
+        completed: false,
+        content: 'Use standard shell tools to search, transform, and summarize data from logs, configs, and build outputs.',
+        learningGoals: [
+          'Filter large outputs into focused diagnostic views.',
+          'Combine tools in pipelines for repeatable data extraction.',
+          'Apply text processing to automate validation and reporting tasks.'
+        ],
+        subtopics: [
+          {
+            title: 'Search and filter techniques',
+            description: 'Quickly isolate patterns and anomalies across many files and command outputs.',
+            keyPoints: [
+              'Use recursive search to locate symbols and configuration keys.',
+              'Filter command output with precise include and exclude rules.',
+              'Preserve context lines to debug related events.'
+            ]
+          },
+          {
+            title: 'Transformation and reporting pipelines',
+            description: 'Chain tools to normalize output and build compact summaries for engineering workflows.',
+            keyPoints: [
+              'Extract relevant columns and fields from structured text.',
+              'Sort and de-duplicate records to expose unique issues.',
+              'Emit concise reports suitable for CI artifacts and handoffs.'
             ]
           }
         ]
