@@ -286,29 +286,29 @@ export const curriculum: Module[] = [
         subtopics: [
           {
             title: 'Hierarchy and system directories',
-            description: 'Learn what belongs in root, configuration, temporary, and user spaces.',
+            description: 'Learn core filesystem concepts with clear definitions and practical usage scenarios.',
             keyPoints: [
-              '/etc stores system configuration files.',
-              '/dev exposes device files for hardware interfaces.',
-              '/proc and /sys provide kernel and runtime metadata.'
+              'Concept: Directory hierarchy organizes files by system purpose (configuration, binaries, devices, runtime state).',
+              'Definition: /etc stores configuration, /dev maps hardware as files, and /proc + /sys expose kernel/runtime metadata.',
+              'Real-world example: When a sensor is not detected, check /dev for device nodes and /etc for service config before rebooting.'
             ]
           },
           {
             title: 'Permissions and ownership model',
-            description: 'Control access through user, group, and mode semantics.',
+            description: 'Understand access control concepts with definitions and operational examples.',
             keyPoints: [
-              'Read, write, and execute bits define access rights.',
-              'Ownership changes affect service behavior.',
-              'Least privilege reduces security exposure.'
+              'Concept: Linux access control uses owner, group, and permission bits to protect files.',
+              'Definition: r/w/x bits define allowed operations for user, group, and others; ownership controls who gets primary rights.',
+              'Real-world example: A startup script fails on boot because execute permission is missing; fixing mode and owner restores service startup.'
             ]
           },
           {
             title: 'Links, mounts, and disk usage',
-            description: 'Work with symbolic links, mounted filesystems, and storage analysis during field debugging.',
+            description: 'Use storage and mapping concepts with definitions and maintenance examples.',
             keyPoints: [
-              'Distinguish hard links from symbolic links.',
-              'Use mount information to understand removable and virtual filesystems.',
-              'Measure disk usage to prevent log or image growth issues.'
+              'Concept: Links and mounts provide indirection so files and devices can be accessed from stable paths.',
+              'Definition: Hard links reference the same inode, symbolic links point to a path, and mounts attach filesystems into the tree.',
+              'Real-world example: Redirect logs to a mounted external partition and track disk growth to avoid system crashes from full storage.'
             ]
           }
         ]
@@ -327,29 +327,29 @@ export const curriculum: Module[] = [
         subtopics: [
           {
             title: 'Script structure and execution flow',
-            description: 'Organize scripts with clear setup, action, and cleanup phases.',
+            description: 'Build script design concepts with definitions and practical workflow examples.',
             keyPoints: [
-              'Use strict modes to catch errors early.',
-              'Quote variables to avoid expansion surprises.',
-              'Break complex logic into shell functions.'
+              'Concept: Structured scripts are split into setup, execution, and cleanup phases for readability and reliability.',
+              'Definition: Strict mode and safe quoting reduce hidden failures from unset variables, pipeline errors, and whitespace expansion.',
+              'Real-world example: A firmware packaging script validates inputs first, builds artifact bundles, then removes temp files before exit.'
             ]
           },
           {
             title: 'Automation patterns for embedded teams',
-            description: 'Apply scripting to compilation, flashing, and report generation.',
+            description: 'Learn automation concepts with concrete definitions and team-scale examples.',
             keyPoints: [
-              'Loop over target boards or artifacts safely.',
-              'Capture logs with timestamps for traceability.',
-              'Return meaningful exit codes for CI pipelines.'
+              'Concept: Automation scripts standardize repetitive engineering tasks across developers and CI systems.',
+              'Definition: Iteration handles multiple targets, timestamped logging preserves traceability, and exit codes communicate pass/fail status.',
+              'Real-world example: Nightly CI loops through board variants, flashes test firmware, and publishes per-board logs for regression triage.'
             ]
           },
           {
             title: 'Arguments, environment, and debugging',
-            description: 'Make scripts configurable, robust, and observable in development and production CI runs.',
+            description: 'Improve script robustness by understanding configuration and debug concepts with applied examples.',
             keyPoints: [
-              'Parse positional arguments and optional flags consistently.',
-              'Validate required environment variables early.',
-              'Use trace modes and controlled debug output to isolate failures.'
+              'Concept: Script behavior should be configurable through arguments and environment while remaining observable.',
+              'Definition: Positional/flag parsing defines input contracts, environment checks enforce prerequisites, and trace mode reveals execution flow.',
+              'Real-world example: A deployment script rejects missing BOARD_ID early and uses trace logging to pinpoint the exact failing flash command.'
             ]
           }
         ]
