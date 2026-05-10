@@ -19,33 +19,35 @@ const Index = () => {
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
       
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8 overflow-y-auto">
         {/* Header */}
-        <header className="flex items-center justify-between mb-10">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">Learning Path</h1>
+        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-8 lg:mb-10">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Learning Path</h1>
             <p className="text-slate-500 mt-1">Welcome back! Continue your journey in Embedded Systems.</p>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="relative w-64">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 w-full lg:w-auto">
+            <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <Input 
                 placeholder="Search topics..." 
                 className="pl-10 bg-white border-slate-200 rounded-xl focus:ring-blue-500"
               />
             </div>
-            <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors relative">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
-            <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-bold text-slate-900">Alex Rivera</p>
-                <p className="text-xs text-slate-500">Student ID: #8821</p>
-              </div>
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold">
-                AR
+            <div className="flex items-center justify-between sm:justify-start gap-3 sm:gap-4">
+              <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors relative">
+                <Bell size={20} />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+              </button>
+              <div className="flex items-center gap-3 sm:pl-4 sm:border-l border-slate-200">
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-bold text-slate-900">Alex Rivera</p>
+                  <p className="text-xs text-slate-500">Student ID: #8821</p>
+                </div>
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold">
+                  AR
+                </div>
               </div>
             </div>
           </div>
@@ -84,9 +86,9 @@ const Index = () => {
 
         {/* Curriculum Grid */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
             <h2 className="text-xl font-bold text-slate-900">Curriculum Roadmap</h2>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <span className="flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200">
                 <div className="w-2 h-2 rounded-full bg-emerald-500"></div> Beginner
               </span>

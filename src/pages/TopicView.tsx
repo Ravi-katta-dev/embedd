@@ -70,9 +70,9 @@ const TopicView = () => {
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white shrink-0">
-          <div className="flex items-center gap-4">
+      <main className="flex-1 flex flex-col min-h-screen lg:h-screen overflow-hidden pt-16 lg:pt-0">
+        <header className="min-h-16 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-2 lg:py-0 bg-white shrink-0 gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
             <button 
               onClick={() => navigate(`/module/${moduleId}`)}
               className="p-2 hover:bg-slate-50 rounded-lg text-slate-500 transition-colors"
@@ -80,17 +80,17 @@ const TopicView = () => {
               <ArrowLeft size={20} />
             </button>
             <div className="h-6 w-px bg-slate-200"></div>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">{module.title}</p>
-              <h2 className="text-sm font-bold text-slate-900">{topic.title}</h2>
+              <h2 className="text-sm font-bold text-slate-900 truncate">{topic.title}</h2>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <Button 
               variant="outline" 
               size="sm" 
-              className="rounded-xl gap-2"
+              className="rounded-xl gap-2 flex-1 sm:flex-none"
               onClick={() => setShowQuiz(!showQuiz)}
             >
               <HelpCircle size={16} />
@@ -98,7 +98,7 @@ const TopicView = () => {
             </Button>
             <Button 
               onClick={handleComplete}
-              className="bg-blue-600 hover:bg-blue-700 rounded-xl gap-2"
+              className="bg-blue-600 hover:bg-blue-700 rounded-xl gap-2 flex-1 sm:flex-none"
             >
               <CheckCircle size={16} />
               <span>Complete & Next</span>
@@ -107,15 +107,15 @@ const TopicView = () => {
         </header>
 
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto py-12 px-8">
+          <div className="max-w-3xl mx-auto py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
             {showQuiz ? (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-3xl font-bold text-slate-900 mb-8">Knowledge Check</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-8">Knowledge Check</h2>
                 <Quiz questions={quizQuestions} onComplete={handleComplete} />
               </div>
             ) : (
               <article className="prose prose-slate max-w-none animate-in fade-in duration-500">
-                <h1 className="text-4xl font-extrabold text-slate-900 mb-8">{topic.title}</h1>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-8">{topic.title}</h1>
                 
                 <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mb-8">
                   <p className="text-blue-800 font-medium m-0">
@@ -163,7 +163,7 @@ void init_gpio() {
             )}
 
             {!showQuiz && (
-              <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
+              <div className="mt-16 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                 {prevTopic ? (
                   <button 
                     onClick={() => navigate(`/module/${moduleId}/topic/${prevTopic.id}`)}

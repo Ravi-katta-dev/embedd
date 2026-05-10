@@ -31,7 +31,7 @@ const ModuleDetail = () => {
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
       
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8 overflow-y-auto">
         <button 
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors mb-6 group"
@@ -43,8 +43,8 @@ const ModuleDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Module Info & Topics */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
                 <Badge variant="outline" className="rounded-full px-3 py-1 border-blue-200 text-blue-600 bg-blue-50">
                   {module.level}
                 </Badge>
@@ -53,7 +53,7 @@ const ModuleDetail = () => {
                   <Clock size={14} /> {module.duration}
                 </span>
               </div>
-              <h1 className="text-3xl font-bold text-slate-900 mb-4">{module.title}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">{module.title}</h1>
               <p className="text-slate-600 leading-relaxed mb-8">
                 {module.description}
               </p>
@@ -70,12 +70,12 @@ const ModuleDetail = () => {
             <div className="space-y-4">
               <h2 className="text-xl font-bold text-slate-900 px-2">Curriculum Topics</h2>
               {module.topics.map((topic, index) => (
-                <div 
+                <div
                   key={topic.id}
                   onClick={() => navigate(`/module/${moduleId}/topic/${topic.id}`)}
                   className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-200 transition-all group cursor-pointer"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
                       {topic.completed ? (
                         <CheckCircle2 size={22} className="text-emerald-500" />
@@ -96,7 +96,7 @@ const ModuleDetail = () => {
                         </span>
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="rounded-full">
+                    <Button variant="ghost" size="icon" className="rounded-full hidden sm:inline-flex">
                       <PlayCircle size={24} className="text-slate-300 group-hover:text-blue-600" />
                     </Button>
                   </div>
